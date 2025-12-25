@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tạo Thiệp Giáng Sinh</title>
+    <link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Mali', cursive;
+            background: linear-gradient(135deg, #8B0000, #c41e3a);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            font-size: 42px;
+            margin-bottom: 30px;
+            color: #FFD700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        h2 {
+            color: #FFD700;
+            margin: 30px 0 15px;
+            font-size: 28px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+            padding-bottom: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #FFD700;
+        }
+        
+        .required::after {
+            content: " *";
+            color: #ff6b6b;
+        }
+        
+        input[type="text"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            font-family: 'Mali', cursive;
+            font-size: 16px;
+            color: #333;
+            transition: all 0.3s ease;
+        }
+        
+        input[type="text"]:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #FFD700;
+            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.3);
+        }
+        
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .upload-area {
+            border: 3px dashed rgba(255, 255, 255, 0.5);
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .upload-area:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: #FFD700;
+        }
+        
+        .upload-area i {
+            font-size: 48px;
+            color: #FFD700;
+            margin-bottom: 15px;
+        }
+        
+        .upload-area input[type="file"] {
+            display: none;
+        }
+        
+        .file-list {
+            margin-top: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .file-item {
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .file-item .remove-file {
+            color: #ff6b6b;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .counter {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+            text-align: right;
+            margin-top: 5px;
+        }
+        
+        .counter.max {
+            color: #ff6b6b;
+        }
+        
+        .music-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .music-option {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .music-option:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: #FFD700;
+        }
+        
+        .music-option.selected {
+            background: rgba(255, 215, 0, 0.2);
+            border-color: #FFD700;
+            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.3);
+        }
+        
+        .music-option input[type="radio"] {
+            display: none;
+        }
+        
+        .music-option label {
+            cursor: pointer;
+            color: white;
+            font-weight: 400;
+            margin: 0;
+        }
+        
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: #8B0000;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Mali', cursive;
+            font-size: 24px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 40px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+        
+        .submit-btn:active {
+            transform: translateY(-1px);
+        }
+        
+        .error {
+            background: rgba(255, 107, 107, 0.2);
+            border: 2px solid #ff6b6b;
+            color: #ffebee;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .success {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: 20px;
+        }
+        
+        .success h2 {
+            color: #FFD700;
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+        
+        .link-box {
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            word-break: break-all;
+            font-size: 18px;
+        }
+        
+        .link-box a {
+            color: #8B0000;
+            text-decoration: none;
+            font-weight: 700;
+        }
+        
+        .link-box a:hover {
+            text-decoration: underline;
+        }
+        
+        .qr-code {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            display: inline-block;
+            margin: 20px 0;
+        }
+        
+        .back-btn {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 32px;
+            }
+            
+            .music-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .submit-btn {
+                font-size: 20px;
+                padding: 15px;
+            }
+        }
+        
+        /* Icon style */
+        .icon {
+            font-style: normal;
+            margin-right: 8px;
+        }
+        
+        /* Tips */
+        .tips {
+            background: rgba(255, 215, 0, 0.1);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+        
+        .tips h3 {
+            color: #FFD700;
+            margin-bottom: 10px;
+        }
+        
+        .tips ul {
+            padding-left: 20px;
+        }
+        
+        .tips li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <label>
+  <input type="radio" name="music" value="hoanhipgiangsinh.mp3">
+  🎄 Hòa Nhịp Giáng Sinh
+</label>
+
+    <div class="container">
+        <h1>🎄 Tạo Thiệp Giáng Sinh Cá Nhân Hóa 🎄</h1>
+        
+                    <div class="error">
+                ⚠️ Vui lòng nhập tên người nhận.            </div>
+                
+                    <form id="cardForm">
+                <!-- THÔNG TIN CƠ BẢN -->
+                <h2>📝 Thông tin cơ bản</h2>
+                
+                <div class="form-group">
+                    <label for="name" class="required">
+                        <span class="icon">👤</span>Tên người nhận:
+                    </label>
+                    <input type="text" id="name" name="name" required 
+                           placeholder="Ví dụ: Anh yêu, Em bé, Gia đình thân yêu..."
+                           value="">
+                </div>
+                
+                <div class="form-group">
+                    <label for="short_wish" class="required">
+                        <span class="icon">💌</span>Lời chúc ngắn (hiển thị bên phải cây thông):
+                    </label>
+                    <textarea id="short_wish" name="short_wish" required rows="3"
+                              placeholder="Chúc bạn và gia đình một mùa Giáng Sinh bình an, hạnh phúc và ấm áp..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="wishes" class="required">
+                        <span class="icon">❄️</span>Các lời chúc rơi trong trang chính (mỗi dòng 1 câu):
+                    </label>
+                    <textarea id="wishes" name="wishes" required rows="6"
+                              placeholder="Giáng Sinh vui vẻ
+Giáng Sinh an lành
+Năm mới hạnh phúc
+Mãi mãi yêu thương
+Bình an đến với bạn"></textarea>
+                    <div class="counter">Đã nhập: <span id="wishCount">0</span> câu</div>
+                </div>
+                
+                <!-- UPLOAD ẢNH TỪ MÁY -->
+                <h2>📷 Upload ảnh từ máy (tối đa 5 ảnh)</h2>
+                
+                <div class="form-group">
+                    <div class="upload-area" id="uploadArea">
+                        <div class="icon">📁</div>
+                        <p style="font-size: 18px; margin-bottom: 10px;">Kéo thả ảnh vào đây hoặc click để chọn</p>
+                        <p style="font-size: 14px; color: rgba(255,255,255,0.8); margin-bottom: 20px;">
+                            Hỗ trợ: JPG, PNG, GIF, WebP, BMP<br>
+                            Tối đa: 5 ảnh, mỗi ảnh ≤ 5MB
+                        </p>
+                        <input type="file" id="upload_images" name="upload_images[]" 
+                               accept="image/*" multiple onchange="handleFileSelect(this)">
+                        <button type="button" onclick="document.getElementById('upload_images').click()" 
+                                style="background: #FFD700; color: #8B0000; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-family: 'Mali', cursive; font-weight: 600;">
+                            Chọn ảnh
+                        </button>
+                    </div>
+                    
+                    <div class="file-list" id="fileList"></div>
+                    <div class="counter" id="uploadCounter">Đã chọn: <span>0</span>/5 ảnh</div>
+                </div>
+                
+                <!-- LINK ẢNH -->
+                <h2>🔗 Dán link ảnh (tối đa 20 link)</h2>
+                
+                <div class="form-group">
+                    <label for="link_images">
+                        <span class="icon">🔗</span>Mỗi dòng 1 link ảnh:
+                    </label>
+                    <textarea id="link_images" name="link_images" rows="5"
+                              placeholder="https://example.com/image1.jpg
+https://example.com/image2.png
+https://example.com/image3.jpg"></textarea>
+                    <div class="counter">Đã nhập: <span id="linkCount">0</span>/20 link</div>
+                </div>
+                
+                <!-- CHỌN NHẠC -->
+                <h2>🎵 Chọn nhạc nền</h2>
+                
+                <div class="form-group">
+                    <div class="music-grid" id="musicGrid">
+                                                    <div class="music-option ">
+                                <input type="radio" id="music0" name="music" 
+                                       value="Last Christmas.mp3" 
+                                       >
+                                <label for="music0">
+                                    <div style="font-size: 24px; margin-bottom: 5px;">🎵</div>
+                                    Last Christmas                                </label>
+                            </div>
+                                                    <div class="music-option ">
+                                <input type="radio" id="music1" name="music" 
+                                       value="Một Đời.mp3" 
+                                       >
+                                <label for="music1">
+                                    <div style="font-size: 24px; margin-bottom: 5px;">🎵</div>
+                                    Một Đời                                </label>
+                            </div>
+                                                    <div class="music-option ">
+                                <input type="radio" id="music2" name="music" 
+                                       value="Yêu Nhau Nhé Bạn Thân.mp3" 
+                                       >
+                                <label for="music2">
+                                    <div style="font-size: 24px; margin-bottom: 5px;">🎵</div>
+                                    Yêu Nhau Nhé Bạn Thân                                </label>
+                            </div>
+                                                    <div class="music-option ">
+                                <input type="radio" id="music3" name="music" 
+                                       value="EM ĐỒNG Ý (I DO).mp3" 
+                                       >
+                                <label for="music3">
+                                    <div style="font-size: 24px; margin-bottom: 5px;">🎵</div>
+                                    EM ĐỒNG Ý (I DO)                                </label>
+                            </div>
+                                                    <div class="music-option ">
+                                <input type="radio" id="music4" name="music" 
+                                       value="A Thousand Years.mp3" 
+                                       >
+                                <label for="music4">
+                                    <div style="font-size: 24px; margin-bottom: 5px;">🎵</div>
+                                    A Thousand Years                                </label>
+                            </div>
+                                                    <div class="music-option ">
+                                <input type="radio" id="music5" name="music" 
+                                       value="Đúng Người Đúng Thời Điểm.mp3" 
+                                       >
+                                <label for="music5">
+                                    <div style="font-size: 24px; margin-bottom: 5px;">🎵</div>
+                                    Đúng Người Đúng Thời Điểm                                </label>
+                            </div>
+                                                    <div class="music-option ">
+                                <input type="radio" id="music6" name="music" 
+                                       value="Love Story.mp3" 
+                                       >
+                                <label for="music6">
+                                    <div style="font-size: 24px; margin-bottom: 5px;">🎵</div>
+                                    Love Story                                </label>
+                            </div>
+                                                    <div class="music-option selected">
+                                <input type="radio" id="music7" name="music" 
+                                       value="HÒA NHỊP GIÁNG SINH.mp3" 
+                                       checked>
+                                <label for="music7">
+                                    <div style="font-size: 24px; margin-bottom: 5px;">🎵</div>
+                                    HÒA NHỊP GIÁNG SINH                                </label>
+                            </div>
+                                            </div>
+                </div>
+                
+                <!-- TIPS -->
+                <div class="tips">
+                    <h3>💡 Mẹo nhỏ:</h3>
+                    <ul>
+                        <li>Nên có ít nhất 5-10 câu chúc để hiệu ứng rơi đẹp hơn</li>
+                        <li>Ảnh upload từ máy sẽ được lưu trên server của bạn</li>
+                        <li>Link ảnh nên là link trực tiếp đến file ảnh (kết thúc bằng .jpg, .png, .gif...)</li>
+                        <li>Bài hát "HÒA NHỊP GIÁNG SINH" được chọn mặc định vì phù hợp không khí Giáng Sinh</li>
+                        <li>Sau khi tạo, bạn có thể chia sẻ link hoặc QR code cho bạn bè, người thân</li>
+                    </ul>
+                </div>
+                
+                <!-- NÚT TẠO THIỆP -->
+                <button type="button" class="submit-btn" onclick="createCard()">
+                    🎄 TẠO THIỆP GIÁNG SINH 🎄
+                </button>
+            </form>
+            </div>
+
+    <script>
+        // ========== XỬ LÝ ĐẾM SỐ CÂU CHÚC ==========
+        const wishesTextarea = document.getElementById('wishes');
+        const wishCountSpan = document.getElementById('wishCount');
+        
+        function updateWishCount() {
+            const text = wishesTextarea.value.trim();
+            const lines = text.split('\n').filter(line => line.trim() !== '');
+            wishCountSpan.textContent = lines.length;
+        }
+        
+        wishesTextarea.addEventListener('input', updateWishCount);
+        updateWishCount(); // Cập nhật ban đầu
+        
+        // ========== XỬ LÝ UPLOAD ẢNH ==========
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('upload_images');
+        const fileList = document.getElementById('fileList');
+        const uploadCounter = document.getElementById('uploadCounter').querySelector('span');
+        const maxFiles = 5;
+        let selectedFiles = [];
+        
+        // Kéo thả file
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#FFD700';
+            uploadArea.style.background = 'rgba(255, 255, 255, 0.2)';
+        });
+        
+        uploadArea.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = 'rgba(255, 255, 255, 0.5)';
+            uploadArea.style.background = 'rgba(255, 255, 255, 0.1)';
+        });
+        
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = 'rgba(255, 255, 255, 0.5)';
+            uploadArea.style.background = 'rgba(255, 255, 255, 0.1)';
+            
+            if (e.dataTransfer.files.length > 0) {
+                handleFiles(e.dataTransfer.files);
+            }
+        });
+        
+        // Xử lý chọn file
+        function handleFileSelect(input) {
+            if (input.files.length > 0) {
+                handleFiles(input.files);
+            }
+        }
+        
+        function handleFiles(files) {
+            const remainingSlots = maxFiles - selectedFiles.length;
+            
+            // Chỉ lấy số file còn lại
+            const filesToAdd = Array.from(files).slice(0, remainingSlots);
+            
+            filesToAdd.forEach(file => {
+                // Kiểm tra định dạng file
+                const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/bmp'];
+                if (!validTypes.includes(file.type)) {
+                    alert('Chỉ chấp nhận file ảnh (JPG, PNG, GIF, WebP, BMP)');
+                    return;
+                }
+                
+                // Kiểm tra kích thước (5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('File ' + file.name + ' vượt quá 5MB');
+                    return;
+                }
+                
+                // Thêm file vào danh sách
+                selectedFiles.push(file);
+            });
+            
+            updateFileList();
+            updateFileInput();
+        }
+        
+        function updateFileList() {
+            fileList.innerHTML = '';
+            selectedFiles.forEach((file, index) => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                
+                const fileName = file.name.length > 30 ? file.name.substring(0, 30) + '...' : file.name;
+                const fileSize = (file.size / 1024 / 1024).toFixed(2); // MB
+                
+                fileItem.innerHTML = `
+                    <div>
+                        <strong>${fileName}</strong>
+                        <div style="font-size: 12px; color: #666;">${fileSize} MB</div>
+                    </div>
+                    <div class="remove-file" onclick="removeFile(${index})">✕</div>
+                `;
+                
+                fileList.appendChild(fileItem);
+            });
+            
+            uploadCounter.textContent = selectedFiles.length;
+            
+            // Đổi màu counter khi đạt max
+            const counterDiv = document.getElementById('uploadCounter');
+            if (selectedFiles.length >= maxFiles) {
+                counterDiv.classList.add('max');
+            } else {
+                counterDiv.classList.remove('max');
+            }
+        }
+        
+        function removeFile(index) {
+            selectedFiles.splice(index, 1);
+            updateFileList();
+            updateFileInput();
+        }
+        
+        function updateFileInput() {
+            // Tạo DataTransfer để cập nhật file input
+            const dataTransfer = new DataTransfer();
+            selectedFiles.forEach(file => {
+                dataTransfer.items.add(file);
+            });
+            fileInput.files = dataTransfer.files;
+        }
+        
+        // ========== XỬ LÝ ĐẾM LINK ẢNH ==========
+        const linkTextarea = document.getElementById('link_images');
+        const linkCountSpan = document.getElementById('linkCount');
+        const maxLinks = 20;
+        
+        function updateLinkCount() {
+            const text = linkTextarea.value.trim();
+            const lines = text.split('\n').filter(line => line.trim() !== '');
+            linkCountSpan.textContent = lines.length;
+            
+            // Đổi màu khi vượt quá
+            if (lines.length > maxLinks) {
+                linkCountSpan.style.color = '#ff6b6b';
+            } else {
+                linkCountSpan.style.color = 'rgba(255, 255, 255, 0.8)';
+            }
+        }
+        
+        linkTextarea.addEventListener('input', updateLinkCount);
+        updateLinkCount(); // Cập nhật ban đầu
+        
+        // ========== XỬ LÝ CHỌN NHẠC ==========
+        const musicOptions = document.querySelectorAll('.music-option');
+        
+        musicOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                // Bỏ chọn tất cả
+                musicOptions.forEach(opt => opt.classList.remove('selected'));
+                // Chọn option hiện tại
+                this.classList.add('selected');
+                // Đánh dấu radio button
+                this.querySelector('input[type="radio"]').checked = true;
+            });
+        });
+        
+        // ========== KIỂM TRA FORM TRƯỚC KHI GỬI ==========
+        document.getElementById('cardForm').addEventListener('submit', function(e) {
+            // Kiểm tra số link ảnh
+            const linkText = linkTextarea.value.trim();
+            const linkLines = linkText.split('\n').filter(line => line.trim() !== '');
+            
+            if (linkLines.length > maxLinks) {
+                e.preventDefault();
+                alert(`Chỉ được nhập tối đa ${maxLinks} link ảnh. Hiện tại bạn đã nhập ${linkLines.length} link.`);
+                linkTextarea.focus();
+                return;
+            }
+            
+            // Kiểm tra định dạng link
+            const invalidLinks = linkLines.filter(link => {
+                const pattern = /\.(jpg|jpeg|png|gif|webp|bmp)(\?.*)?$/i;
+                return !pattern.test(link) && !isValidUrl(link);
+            });
+            
+            if (invalidLinks.length > 0) {
+                e.preventDefault();
+                alert('Một số link không đúng định dạng ảnh. Vui lòng kiểm tra lại.\nLink hợp lệ phải kết thúc bằng .jpg, .png, .gif, .webp, .bmp hoặc là URL hợp lệ.');
+                return;
+            }
+            
+            // Kiểm tra ít nhất 1 ảnh hoặc 1 link
+            if (selectedFiles.length === 0 && linkLines.length === 0) {
+                if (!confirm('Bạn chưa thêm ảnh nào. Thiệp sẽ chỉ có chữ rơi. Bạn có muốn tiếp tục?')) {
+                    e.preventDefault();
+                    return;
+                }
+            }
+        });
+        
+        function isValidUrl(string) {
+            try {
+                new URL(string);
+                return true;
+            } catch (_) {
+                return false;
+            }
+        }
+function createCard() {
+    const name = document.getElementById('name').value.trim();
+    const shortWish = document.getElementById('short_wish').value.trim();
+    const wishes = document.getElementById('wishes').value.trim();
+    const linkText = document.getElementById('link_images').value.trim();
+
+    const musicRadio = document.querySelector('input[name="music"]:checked');
+    const music = musicRadio ? musicRadio.value : '';
+
+    if (!name || !shortWish || !wishes) {
+        alert('Vui lòng nhập đầy đủ thông tin!');
+        return;
+    }
+
+    const data = {
+        name,
+        shortWish,
+        wishes: wishes.split('\n'),
+        images: linkText
+            ? linkText.split('\n').filter(l => l.trim() !== '')
+            : [],
+        music
+    };
+
+    const encoded = btoa(encodeURIComponent(JSON.stringify(data)));
+    window.open(`card.html?data=${encoded}`, '_blank');
+}
+
+      
+        // ========== TỰ ĐỘNG FOCUS VÀO Ô ĐẦU TIÊN ==========
+            </script>
+</body>
+</html>

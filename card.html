@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Thiệp Giáng Sinh</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+body {
+    margin: 0;
+    background: linear-gradient(135deg, #8B0000, #c41e3a);
+    color: white;
+    font-family: 'Mali', cursive;
+    overflow: hidden;
+}
+
+.center {
+    text-align: center;
+    margin-top: 80px;
+}
+
+h1 {
+    color: #FFD700;
+    font-size: 48px;
+}
+
+.short {
+    font-size: 26px;
+    margin: 20px;
+}
+
+.falling {
+    position: fixed;
+    top: -60px;
+    font-size: 24px;              /* TO HƠN */
+    font-weight: 700;
+    white-space: nowrap;
+    color: #FFFFF0;
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.4);
+    animation: fall linear infinite;
+    opacity: 0.95;
+    pointer-events: none;
+}
+
+
+.falling-img {
+    position: fixed;
+    top: -80px;
+    width: 70px;
+    height: 70px;
+    border: 3px solid white;
+    object-fit: cover;      /* giữ đúng tỉ lệ ảnh */
+    border-radius: 14px;    /* bo tròn xinh xinh */
+    box-shadow: 0 8px 16px rgba(0,0,0,0.25);
+    pointer-events: none;
+    animation: fall linear infinite;
+}
+
+
+
+@keyframes fall {
+    to {
+        transform: translateY(110vh) rotate(15deg);
+    }
+}
+
+</style>
+</head>
+<body>
+
+<button id="playBtn" style="
+position:fixed;
+bottom:20px;
+right:20px;
+padding:12px 20px;
+border:none;
+border-radius:12px;
+background:#FFD700;
+color:#8B0000;
+font-size:16px;
+cursor:pointer;
+z-index:9999;">
+🎵 Bật nhạc
+</button>
+
+<audio id="bgMusic" loop></audio>
+
+
+<audio id="music" loop></audio>
+
+
+<div class="center">
+    <h1 id="title"></h1>
+    <div class="short" id="shortWish"></div>
+</div>
+
+<audio id="music" autoplay loop></audio>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const encoded = params.get('data');
+
+if (!encoded) {
+    document.body.innerHTML = '❌ Thiệp không hợp lệ';
+    throw '';
+}
+
+const data = JSON.parse(decodeURIComponent(atob(encoded)));
+
+document.getElementById('title').innerText = `🎄 Gửi ${data.name} 🎄`;
+document.getElementById('shortWish').innerText = data.shortWish;
+
+if (data.music) {
+    const audio = document.getElementById('music');
+    audio.src = `music/${data.music}`;
+}
+
+// Chữ rơi
+function createFallingText() {
+    const text = data.wishes[Math.floor(Math.random() * data.wishes.length)];
+
+    const el = document.createElement('div');
+    el.className = 'falling';
+    el.innerText = text;
+
+    el.style.left = Math.random() * 100 + 'vw';
+    el.style.fontSize = (24 + Math.random() * 12) + 'px';
+    el.style.animationDuration = (6 + Math.random() * 6) + 's';
+
+    document.body.appendChild(el);
+        // Xoá khi rơi xong để đỡ lag
+    setTimeout(() => el.remove(), 13000);
+}
+
+// Mỗi 700ms rơi 1 chữ
+setInterval(createFallingText, 1500);
+
+
+// Ảnh rơi cute 1:1
+if (data.images && data.images.length) {
+    data.images.forEach(src => {
+        const img = document.createElement('img');
+        img.src = src;
+        img.className = 'falling-img';
+
+        const size = 50 + Math.random() * 30; // 50–80px
+        img.style.width = size + 'px';
+        img.style.height = size + 'px';
+
+        img.style.left = Math.random() * 100 + 'vw';
+        img.style.animationDuration = (8 + Math.random() * 6) + 's';
+        img.style.opacity = (0.7 + Math.random() * 0.3);
+
+        document.body.appendChild(img);
+    });
+}
+
+
+if (data.music) {
+    const audio = document.getElementById('bgMusic');
+    audio.src = `music/${data.music}`;
+
+    document.getElementById('playBtn').onclick = () => {
+        audio.play().catch(err => console.log(err));
+        document.getElementById('playBtn').style.display = 'none';
+    };
+}
+
+
+</script>
+
+</body>
+</html>
